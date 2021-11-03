@@ -1,23 +1,63 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+
+import axios from 'axios';
+
+import { ReactComponent as Logo } from './assets/Logo.svg';
+
+import Filter from './components/Filter';
+import Tickets from './components/Tickets';
+import { useFilter } from './useFilter';
 
 function App() {
+  const [ticketsData, setTicketsData] = React.useState([]);
+  const [allFilter, setAllFilter] = React.useState(false);
+
+  const getData = async (list) => {
+    try {
+      await axios
+        .get(
+          `https://front-test.beta.aviasales.ru/tickets?searchId=${list.searchId}`
+        )
+        .then(({ data }) =>
+          data.stop ? setTicketsData(data.tickets) : getData(list)
+        );
+    } catch (err) {
+      getData(list);
+    }
+  };
+
+  React.useEffect(() => {
+    axios
+      .get('https://front-test.beta.aviasales.ru/search')
+      .then(({ data }) => {
+        getData(data);
+      });
+  }, []);
+
+  const onAllFilter = () => {
+    setAllFilter(!allFilter);
+  };
+
+  const { data, filterHandler } = useFilter({
+    data: ticketsData,
+    initialFilters: [],
+    allFilter: allFilter,
+  });
+  console.log(filterHandler);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='wrapper'>
+      <div className='logo'>
+        <Logo />
+      </div>
+      <div className='content'>
+        <Filter
+          filterHandler={filterHandler}
+          allFilter={allFilter}
+          onAllFilter={onAllFilter}
+        />
+        <Tickets data={data} />
+      </div>
     </div>
   );
 }

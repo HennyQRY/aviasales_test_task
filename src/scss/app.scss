@@ -1,0 +1,37 @@
+@import './components/all';
+
+* {
+  list-style: none;
+  outline: none;
+  font-family: 'Open Sans', Roboto, system-ui, Tahoma, sans-serif;
+  box-sizing: border-box;
+}
+
+html {
+  background-color: white;
+}
+
+body {
+  margin: 0;
+}
+
+.wrapper {
+  width: 960px;
+  background-color: #f3f7fa;
+  margin: 20px auto;
+  padding-top: 1px;
+}
+
+.logo {
+  width: 60px;
+  height: 60px;
+  margin: 50px auto;
+}
+
+.content {
+  width: 754px;
+  margin: 50px auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}

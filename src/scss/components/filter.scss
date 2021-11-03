@@ -1,0 +1,43 @@
+.filter {
+  width: 232px;
+  background: #ffffff;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+
+  &_title {
+    margin: 20px 20px 10px 20px;
+    text-transform: uppercase;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 12px;
+    letter-spacing: 0.5px;
+    color: #4a4a4a;
+  }
+
+  &_list {
+    padding-left: 0;
+    margin: 10px 0;
+
+    &_item {
+      padding-left: 20px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+
+      &_text {
+        margin-left: 10px;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 13px;
+        line-height: 20px;
+        color: #4a4a4a;
+      }
+    }
+
+    &_item:hover {
+      background-color: #f1fcff;
+    }
+  }
+}
