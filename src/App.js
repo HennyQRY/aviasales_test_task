@@ -1,62 +1,56 @@
 import React from 'react';
 
-import axios from 'axios';
-
-import { ReactComponent as Logo } from './assets/Logo.svg';
-
 import Filter from './components/Filter';
 import Tickets from './components/Tickets';
-import { useFilter } from './useFilter';
+import { useTickets, useFilter } from './hooks';
+import { Logo } from './assets/icons';
+
+const initialFilters = [
+  {
+    name: 'Без пересадок',
+    active: false,
+  },
+  {
+    name: '1 пересадка',
+    active: false,
+  },
+  {
+    name: '2 пересадки',
+    active: false,
+  },
+  {
+    name: '3 пересадки',
+    active: false,
+  },
+];
 
 function App() {
-  const [ticketsData, setTicketsData] = React.useState([]);
-  const [allFilter, setAllFilter] = React.useState(false);
+  const { tickets, isLoading } = useTickets();
 
-  const getData = async (list) => {
-    try {
-      await axios
-        .get(
-          `https://front-test.beta.aviasales.ru/tickets?searchId=${list.searchId}`
-        )
-        .then(({ data }) =>
-          data.stop ? setTicketsData(data.tickets) : getData(list)
-        );
-    } catch (err) {
-      getData(list);
-    }
-  };
-
-  React.useEffect(() => {
-    axios
-      .get('https://front-test.beta.aviasales.ru/search')
-      .then(({ data }) => {
-        getData(data);
-      });
-  }, []);
-
-  const onAllFilter = () => {
-    setAllFilter(!allFilter);
-  };
-
-  const { data, filterHandler } = useFilter({
-    data: ticketsData,
-    initialFilters: [],
-    allFilter: allFilter,
+  const {
+    data,
+    filters,
+    filterHandler,
+    allFiltersHandler,
+    isAllFiltersActive,
+  } = useFilter({
+    data: tickets,
+    initialFilters,
   });
-  console.log(filterHandler);
 
   return (
-    <div className='wrapper'>
-      <div className='logo'>
+    <div className="wrapper">
+      <div className="logo">
         <Logo />
       </div>
-      <div className='content'>
+      <div className="content">
         <Filter
           filterHandler={filterHandler}
-          allFilter={allFilter}
-          onAllFilter={onAllFilter}
+          allFiltersHandler={allFiltersHandler}
+          filters={filters}
+          isAllFiltersActive={isAllFiltersActive}
         />
-        <Tickets data={data} />
+        <Tickets data={data} isLoading={isLoading} />
       </div>
     </div>
   );
